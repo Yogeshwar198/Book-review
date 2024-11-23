@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a.active hr {
+    display: block;
+}
+
+@layer base {
+    html {
+        font-family: "Poppins", "sans-serif";
+    }
+}
+
+body{
+    background-color: #fdfeff;
+}
+
+@media (max-width:640px) {
+  a.active{
+      background-color:  #1D4ED8;
+      color: white;
+  }
+}
+
+/* Center slide scaling */
+.swiper-slide-active .slide-image {
+    transform: scale(1.2); /* Scale the center slide */
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Non-active slides */
+.slide-image {
+    transform: scale(1.0); /* Slightly smaller for side slides */
+    transition: transform 0.3s ease-in-out;
+}
+
+
+/* index.css or a specific css file */
+
+::-webkit-scrollbar {
+    width: 8px; /* Set the width of the scrollbar */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #4a90e2; /* Set the color of the scrollbar thumb (handle) */
+    border-radius: 10px; /* Make the scrollbar thumb rounded */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #EBEEFF; /* Set the track color (background of the scrollbar) */
+    border-radius: 10px; /* Round the corners of the track */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #1f6eff; /* Change the color when the thumb is hovered */
+  }
+  
