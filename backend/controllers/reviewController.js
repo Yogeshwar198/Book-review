@@ -1,13 +1,15 @@
 import reviewModel from "../models/reviewModel.js";
 
+
 //  Add a new review
 export const addReview = async (req, res) => {
   try {
-    const { bookId, title, comment, rating } = req.body;
-    const reviewer = req.user?.name; // Assuming `req.user` contains the logged-in user's details
 
-    if (!bookId || !title || !comment || !rating) {
-      throw new Error("All fields are required.");
+    const {reviewer, bookId, title, comment, rating } = req.body;
+
+    if (!reviewer || !bookId || !title || !comment || !rating) {
+      console.error("Validation error: Missing fields");
+      return res.json({ error: "All fields are required." });
     }
 
     const newReview = new reviewModel({
@@ -16,14 +18,24 @@ export const addReview = async (req, res) => {
       title,
       comment,
       rating,
+      date: Date.now(),
     });
 
+    
     await newReview.save();
-    res.json({ message: "Review added successfully.", review: newReview });
+  
+
+    return res.json({
+      message: "Review added successfully.",
+      review: newReview,
+    });
   } catch (error) {
-    res.json({ error: error.message || "Something went wrong." });
+    console.error("Error during addReview:", error.message || error);
+    return res.json({ error: error.message || "Something went wrong." });
   }
 };
+
+
 
 //  Get reviews for a specific book
 export const getReviewsByBook = async (req, res) => {
@@ -46,19 +58,19 @@ export const deleteReview = async (req, res) => {
   try {
     const { id } = req.params;
 
+    // Fetch the review to be deleted
     const review = await reviewModel.findById(id);
     if (!review) {
       throw new Error("Review not found.");
     }
 
-    // Assuming req.user.name matches the `reviewer` field
-    if (review.reviewer !== req.user?.name) {
-      throw new Error("You can only delete your own reviews.");
-    }
 
+    // Proceed to delete the review
     await reviewModel.findByIdAndDelete(id);
-    res.json({ message: "Review deleted successfully." });
+
+    return res.json({ success: true, message: "Review deleted successfully." });
   } catch (error) {
-    res.json({ error: error.message || "Something went wrong." });
+    console.error("Error deleting review:", error); // Log the error for debugging
+    return res.status(400).json({ success: false, error: error.message || "Something went wrong." });
   }
 };

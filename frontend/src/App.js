@@ -14,14 +14,15 @@ import Review from './pages/Review'
 import Login from './pages/Login'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import MyProfile from './pages/MyProfile'
 
 const App = () => {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
-  
+
   return (
     <div className='bg-[#EBEEFF]'>
-       <ToastContainer />
+      <ToastContainer />
       <Navbar />
       <SearchBar />
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
@@ -31,6 +32,7 @@ const App = () => {
           <Route path='/book/:bookId' element={<BookId />} />
           <Route path='/review/:bookId' element={<Review />} />
           <Route path='/login' element={<Login />} />
+          <Route path='/profile' element={<MyProfile />} />
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
         </Routes>

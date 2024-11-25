@@ -5,7 +5,7 @@ import { FaStar } from "react-icons/fa";
 import { CiStar } from "react-icons/ci";
 import { FaRegTrashAlt } from "react-icons/fa";
 
-const Spinner = () => (
+export const Spinner = () => (
   <div className="flex items-center justify-center h-64">
     <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900"></div>
   </div>
@@ -14,7 +14,7 @@ const Spinner = () => (
 
 const BookId = () => {
   const { bookId } = useParams();
-  const { Books_assets, currency, navigate, reviews, deleteReview } = useContext(ShopContext);
+  const { Books_assets, currency, navigate, reviews, deleteReview, fetchBookReviews,user } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState('');
 
@@ -38,13 +38,15 @@ const BookId = () => {
 
   useEffect(() => {
     fetchProductData();
+    fetchBookReviews(bookId);
   }, [Books_assets, bookId]);
 
 
-  const handleDeleteReview = (index) => {
-    deleteReview(bookId, index); // Call the delete function from context
+  const handleDeleteReview = async (reviewId) => {
+    await deleteReview(reviewId, bookId);
+    await fetchBookReviews(bookId);
   };
-
+  
   return productData ? (
     <div className='border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100'>
       {/* Product Data Section */}
@@ -139,16 +141,20 @@ const BookId = () => {
               {/* Display Reviews Here */}
               <div className="text-gray-500">
                 {bookReviews.length > 0 ? (
-                  bookReviews.map((review, index) => (
+                 
+                  bookReviews.map((review, index) => 
+                    (
                     <div key={index} className='border-b py-3'>
 
                       <div className="flex justify-between items-center">
                         <h3 className='font-medium'>{review.reviewer}</h3>
                         {/* Delete button */}
-                        <FaRegTrashAlt
-                          onClick={() => handleDeleteReview(index)}
-                          className="text-red-500 cursor-pointer"
-                        />
+                        {user && review.reviewerEmail === user.email && (
+                          <FaRegTrashAlt
+                            onClick={() => handleDeleteReview(review._id)}
+                            className="text-red-500 cursor-pointer"
+                          />
+                        )}
                       </div>
 
                       <div className="flex items-center gap-1 mt-2">

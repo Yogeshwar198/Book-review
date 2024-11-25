@@ -1,25 +1,44 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; // Import hooks
 import { ShopContext } from "../context/ShopContext";
 import { FaStar } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Review = () => {
-  const { bookId } = useParams(); // Retrieve bookId from the route
-  const navigate = useNavigate(); // Hook to navigate programmatically
-  const { addReview } = useContext(ShopContext); // Access context to add reviews
+  const { bookId } = useParams(); 
+  const navigate = useNavigate(); 
+  const { addReview, user,fetchBookReviews } = useContext(ShopContext); 
   const [newReview, setNewReview] = useState({
-    reviewer: "",
+    reviewer: "Anonymous", 
     title: "",
     comment: "",
     rating: 0,
   });
+    // Update newReview when user data becomes available
+    useEffect(() => {
+      if (user) {
+        setNewReview((prevReview) => ({
+          ...prevReview,
+          reviewer: user.name || "Anonymous",
+        }));
+      }
+    }, [user]); // Only run when user data is updated
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (newReview.reviewer && newReview.title && newReview.comment && newReview.rating) {
-      addReview({ ...newReview, bookId }); // Add review with the current bookId
-      setNewReview({ reviewer: "", title: "", comment: "", rating: 0 });
-      navigate(`/book/${bookId}`); // Navigate back to the book details page
+    if (newReview.title && newReview.comment && newReview.rating) {
+      try {
+        const reviewData = { ...newReview, bookId }; // Send review data to the backend
+        await addReview(reviewData);
+        await fetchBookReviews(bookId);
+        setNewReview({ reviewer: user?.name || "", title: "", comment: "", rating: 0 });
+        navigate(`/book/${bookId}`);
+      } catch (error) {
+        console.error("Error in handleSubmit:", error);
+        toast.error("Failed to add review. Please try again.");
+      }
+    } else {
+      toast.error("Please fill in all fields.");
     }
   };
 
@@ -38,6 +57,7 @@ const Review = () => {
           onChange={(e) => setNewReview({ ...newReview, reviewer: e.target.value })}
           className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
           required
+          readOnly // Make this field read-only since it's auto-populated
         />
       </div>
 
