@@ -5,7 +5,9 @@ This repository contains a Book Review Platform where users can browse books, re
 ---
 
 ## Features
+
 ## Frontend
+
 - **Responsive UI** with the following components:
 - **Home Page:** Displays featured books.
 - **Book Listing Page:** Allows users to search and filter books.
@@ -18,7 +20,9 @@ This repository contains a Book Review Platform where users can browse books, re
 - **Integration:** Seamlessly connects to the backend API.
 
 ## Tech Stack
+
 ## Frontend
+
 1. **React:** Core library for building the user interface.
 2. **React Router:** For navigation and routing.
 3. **TailwindCSS:** For styling the application.
@@ -89,6 +93,8 @@ http://localhost:3000
 - **validator:** For validating user input.
 - **cors:** To enable cross-origin requests.
 
+## Installation and Setup
+
   1. **Navigate to the project directory:**
 ```bash
 cd <filename>
@@ -115,6 +121,7 @@ npm run server
 ```bash
 http://localhost:4000
 ```
+
 ## Admin Frontend
 
 - **Responsive Admin Dashboard:**
